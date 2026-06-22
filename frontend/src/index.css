@@ -1,0 +1,41 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#020817;
+  color:white;
+  font-family:Inter,Arial,sans-serif;
+}
+
+button{
+  background:#2563eb;
+  color:white;
+  border:none;
+  padding:12px 20px;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  background:#1d4ed8;
+}
+
+textarea{
+  background:#0f172a;
+  color:white;
+  border:1px solid #334155;
+  border-radius:12px;
+  padding:15px;
+  font-size:15px;
+  resize:none;
+}
+
+input[type="file"]{
+  color:white;
+}
