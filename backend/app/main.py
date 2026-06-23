@@ -4,24 +4,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes.resume_routes import router as resume_router
 from app.routes.jd_routes import router as jd_router
 from app.routes.ai_routes import router as ai_router
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://ai-interview-intelligence.vercel.app"
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173"
+        "http://localhost:5173",
+        "https://ai-interview-intelligence.vercel.app",
+        "https://ai-interview-intelligence-7zm0fnqna-tej2815s-projects.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
