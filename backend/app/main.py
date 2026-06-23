@@ -4,8 +4,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes.resume_routes import router as resume_router
 from app.routes.jd_routes import router as jd_router
 from app.routes.ai_routes import router as ai_router
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://ai-interview-intelligence.vercel.app"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.add_middleware(
     CORSMiddleware,
