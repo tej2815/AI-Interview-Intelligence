@@ -1,46 +1,74 @@
 import re
 
 SKILLS = [
+    # Languages
     "Python",
     "Java",
-    "C",
     "C++",
+    "C",
     "JavaScript",
     "TypeScript",
+    "Go",
+    "Rust",
+    "Kotlin",
+    "Swift",
+
+    # Frontend
+    "HTML",
+    "CSS",
     "React",
+    "Next.js",
+    "Vue.js",
     "Angular",
-    "Vue",
+    "Tailwind CSS",
+
+    # Backend
     "Node.js",
-    "Express.js",
-    "Spring Boot",
+    "Express",
     "FastAPI",
     "Flask",
     "Django",
+    "Spring",
+    "Spring Boot",
+
+    # Databases
     "SQL",
     "MySQL",
     "PostgreSQL",
     "MongoDB",
     "Redis",
-    "Docker",
-    "Kubernetes",
+    "SQLite",
+
+    # Cloud
     "AWS",
     "Azure",
+    "Google Cloud",
     "GCP",
-    "Git",
-    "GitHub",
+
+    # DevOps
+    "Docker",
+    "Kubernetes",
+    "Jenkins",
+    "GitHub Actions",
+    "Terraform",
+
+    # AI/ML
     "Machine Learning",
     "Deep Learning",
     "TensorFlow",
     "PyTorch",
+    "LangChain",
+    "OpenAI",
+    "LLM",
     "NLP",
-    "Data Structures",
-    "Algorithms",
-    "HTML",
-    "CSS",
-    "Bootstrap",
-    "Tailwind",
-    "REST API",
-    "Microservices"
+    "Computer Vision",
+
+    # Tools
+    "Git",
+    "GitHub",
+    "Linux",
+    "Postman",
+    "VS Code"
 ]
 
 

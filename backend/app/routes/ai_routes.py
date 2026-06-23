@@ -8,6 +8,7 @@ from app.services.skill_service import extract_skills
 from app.services.comparison_service import find_missing_skills
 from app.services.ai_service import generate_interview_questions
 from app.services.evaluation_service import evaluate_answer
+from app.services.roadmap_service import generate_roadmap
 
 router = APIRouter()
 
@@ -66,4 +67,34 @@ async def evaluate_candidate_answer(data: EvaluationRequest):
 
     return {
         "evaluation": evaluation
+    }
+@router.post("/generate-roadmap")
+async def roadmap(data: QuestionRequest):
+
+    db = SessionLocal()
+
+    latest_resume = get_latest_resume(db)
+
+    resume_skills = []
+
+    if latest_resume and latest_resume.skills:
+        resume_skills = latest_resume.skills.split(",")
+
+    jd_skills = extract_skills(
+        data.job_description
+    )
+
+    missing_skills = find_missing_skills(
+        resume_skills,
+        jd_skills
+    )
+
+    roadmap = generate_roadmap(
+        missing_skills
+    )
+
+    db.close()
+
+    return {
+        "roadmap": roadmap
     }

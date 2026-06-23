@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import "./App.css";
 
 function App() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -14,6 +15,27 @@ const [questions, setQuestions] = useState("");
 const [selectedQuestion, setSelectedQuestion] = useState("");
 const [answer, setAnswer] = useState("");
 const [evaluation, setEvaluation] = useState("");
+
+const [roadmap, setRoadmap] = useState("");
+
+const [loadingQuestions, setLoadingQuestions] = useState(false);
+
+const [loadingRoadmap, setLoadingRoadmap] = useState(false);
+
+const [loadingEvaluation, setLoadingEvaluation] = useState(false);
+
+const [loadingAnalysis, setLoadingAnalysis] = useState(false);
+
+const answerLength = answer.trim().length;
+
+const copyQuestion = (question) => {
+  navigator.clipboard.writeText(question);
+
+  alert("Question copied!");
+};
+
+
+
   const handleResumeUpload = async () => {
     if (!selectedFile) {
       setUploadMessage("Please select a PDF.");
@@ -38,38 +60,48 @@ const [evaluation, setEvaluation] = useState("");
   };
 
   const handleAnalyzeJD = async () => {
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/analyze-jd",
-        {
-          job_description: jobDescription,
-        }
-      );
+  setLoadingAnalysis(true);
 
-      setAnalysisData(response.data);
-    } catch (error) {
-      console.error(error);
-      alert("Analysis failed");
-    }
-  };
+  try {
+    const response = await axios.post(
+      "http://127.0.0.1:8000/analyze-jd",
+      {
+        job_description: jobDescription,
+      }
+    );
+
+    setAnalysisData(response.data);
+  } catch (error) {
+    console.error(error);
+    alert("Analysis failed");
+  } finally {
+    setLoadingAnalysis(false);
+  }
+};
 
   const handleGenerateQuestions = async () => {
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/generate-questions",
-        {
-          job_description: jobDescription,
-        }
-      );
+  setLoadingQuestions(true);
 
-      setQuestions(response.data.questions);
-    } catch (error) {
-      console.error(error);
-      alert("Question generation failed");
-    }
-  };
+  try {
+    const response = await axios.post(
+      "http://127.0.0.1:8000/generate-questions",
+      {
+        job_description: jobDescription,
+      }
+    );
+
+    setQuestions(response.data.questions);
+  } catch (error) {
+    console.error(error);
+    alert("Question generation failed");
+  } finally {
+    setLoadingQuestions(false);
+  }
+};
 
   const handleEvaluateAnswer = async () => {
+  setLoadingEvaluation(true);
+
   try {
     const response = await axios.post(
       "http://127.0.0.1:8000/evaluate-answer",
@@ -83,6 +115,29 @@ const [evaluation, setEvaluation] = useState("");
   } catch (error) {
     console.error(error);
     alert("Evaluation failed");
+  } finally {
+    setLoadingEvaluation(false);
+  }
+};
+
+
+  const handleGenerateRoadmap = async () => {
+  setLoadingRoadmap(true);
+
+  try {
+    const response = await axios.post(
+      "http://127.0.0.1:8000/generate-roadmap",
+      {
+        job_description: jobDescription,
+      }
+    );
+
+    setRoadmap(response.data.roadmap);
+  } catch (error) {
+    console.error(error);
+    alert("Roadmap generation failed");
+  } finally {
+    setLoadingRoadmap(false);
   }
 };
 
@@ -121,16 +176,16 @@ const [evaluation, setEvaluation] = useState("");
         padding: "40px 20px",
       }}
     >
-      <h1
-        style={{
-          textAlign: "center",
-          marginBottom: "40px",
-          fontSize: "42px",
-          fontWeight: "700",
-        }}
-      >
-        🤖 AI Interview Intelligence
-      </h1>
+      <>
+  <h1 className="hero-title">
+    🤖 AI Interview Intelligence
+  </h1>
+
+  <p className="hero-subtitle">
+    Analyze resumes. Master interviews.
+    Close skill gaps.
+  </p>
+</>
 
       <div
         style={{
@@ -189,9 +244,14 @@ const [evaluation, setEvaluation] = useState("");
         <br />
         <br />
 
-        <button onClick={handleAnalyzeJD}>
-          Analyze JD
-        </button>
+        <button
+  onClick={handleAnalyzeJD}
+  disabled={loadingAnalysis}
+>
+  {loadingAnalysis
+    ? "Analyzing..."
+    : "Analyze JD"}
+</button>
       </div>
 
       {analysisData && (
@@ -208,25 +268,65 @@ const [evaluation, setEvaluation] = useState("");
           <br />
 
           <div
-            style={{
-              background: "#2563eb",
-              padding: "25px",
-              borderRadius: "15px",
-              textAlign: "center",
-              marginBottom: "25px",
-            }}
-          >
-            <h3>Match Score</h3>
+  className="score-card"
+  style={{
+    background:
+      analysisData.match_score >= 90
+        ? "linear-gradient(135deg,#16a34a,#15803d)"
+        : analysisData.match_score >= 70
+        ? "linear-gradient(135deg,#2563eb,#1e40af)"
+        : "linear-gradient(135deg,#dc2626,#991b1b)"
+  }}
+>
+  <h3>Match Score</h3>
 
-            <h1
-              style={{
-                marginTop: "10px",
-                fontSize: "50px",
-              }}
-            >
-              {analysisData.match_score}%
-            </h1>
-          </div>
+  <h1 className="score-value">
+    {analysisData.match_score}%
+  </h1>
+
+  <div
+  style={{
+    marginTop: "20px",
+    padding: "15px",
+    background: "#0f172a",
+    borderRadius: "12px",
+  }}
+>
+  <h3>
+    ATS Score
+  </h3>
+
+  <h2>
+    {analysisData.ats_score}%
+  </h2>
+
+  <p>
+    {
+      analysisData.ats_score >= 80
+        ? "✅ Likely ATS Friendly"
+        : analysisData.ats_score >= 60
+        ? "⚠️ Could Be Improved"
+        : "❌ ATS May Reject Resume"
+    }
+  </p>
+</div>
+
+    
+  <p
+    style={{
+      marginTop: "10px",
+      fontSize: "18px",
+    }}
+  >
+    {
+      analysisData.match_score >= 90
+        ? "Excellent Match 🚀"
+        : analysisData.match_score >= 70
+        ? "Good Match 👍"
+        : "Needs Improvement 📚"
+    }
+  </p>
+</div>
 
           <h3>Resume Skills</h3>
           {renderSkills(
@@ -253,11 +353,31 @@ const [evaluation, setEvaluation] = useState("");
           <br />
           <br />
 
-          <button
-            onClick={handleGenerateQuestions}
-          >
-            Generate Interview Questions
-          </button>
+          <div
+  style={{
+    display: "flex",
+    gap: "15px",
+    marginTop: "20px",
+  }}
+>
+  <button
+  onClick={handleGenerateQuestions}
+  disabled={loadingQuestions}
+>
+  {loadingQuestions
+    ? "Generating Questions..."
+    : "Generate Interview Questions"}
+</button>
+
+  <button
+  onClick={handleGenerateRoadmap}
+  disabled={loadingRoadmap}
+>
+  {loadingRoadmap
+    ? "Generating Roadmap..."
+    : "Generate Learning Roadmap"}
+</button>
+</div>
         </div>
       )}
 
@@ -274,15 +394,63 @@ const [evaluation, setEvaluation] = useState("");
 
     <br />
 
-    <pre
-      style={{
-        whiteSpace: "pre-wrap",
-        lineHeight: "1.8",
-        fontSize: "15px",
-      }}
-    >
-      {questions}
-    </pre>
+    <div>
+  {questions
+    .split(/\n\d+\./)
+    .filter((q) => q.trim())
+    .map((question, index) => (
+      <div
+        key={index}
+        style={{
+          background: "#0f172a",
+          padding: "20px",
+          borderRadius: "12px",
+          marginBottom: "15px",
+          border: "1px solid #334155",
+        }}
+      >
+        <h3>
+          Question {index + 1}
+        </h3>
+
+        <br />
+
+        <p
+          style={{
+            lineHeight: "1.8",
+          }}
+        >
+          {question.trim()}
+        </p>
+
+        <br />
+
+        <div
+  style={{
+    display: "flex",
+    gap: "10px",
+    marginTop: "10px",
+  }}
+>
+  <button
+    onClick={() =>
+      setSelectedQuestion(question.trim())
+    }
+  >
+    Use This Question
+  </button>
+
+  <button
+    onClick={() =>
+      copyQuestion(question.trim())
+    }
+  >
+    Copy Question
+  </button>
+</div>
+      </div>
+    ))}
+</div>
 
     <br />
     <br />
@@ -309,6 +477,7 @@ const [evaluation, setEvaluation] = useState("");
     <textarea
       rows="8"
       placeholder="Write your answer here..."
+      
       value={answer}
       onChange={(e) =>
         setAnswer(e.target.value)
@@ -321,13 +490,60 @@ const [evaluation, setEvaluation] = useState("");
     />
 
     <br />
-    <br />
+<p>
+  Characters: {answerLength}
+</p>
+
+<div
+  style={{
+    width: "100%",
+    height: "8px",
+    background: "#334155",
+    borderRadius: "10px",
+    marginTop: "8px",
+  }}
+>
+  <div
+    style={{
+      width: `${Math.min(answerLength / 5, 100)}%`,
+      height: "100%",
+      background:
+        answerLength < 100
+          ? "#dc2626"
+          : answerLength < 300
+          ? "#eab308"
+          : "#16a34a",
+      borderRadius: "10px",
+    }}
+  />
+</div>
+
+<p
+  style={{
+    marginTop: "10px",
+    fontWeight: "600",
+  }}
+>
+  {
+    answerLength < 100
+      ? "🔴 Too Short"
+      : answerLength < 300
+      ? "🟡 Could Be More Detailed"
+      : "🟢 Detailed Answer"
+  }
+</p>
+
+<br />
+<br />
 
     <button
-      onClick={handleEvaluateAnswer}
-    >
-      Evaluate My Answer
-    </button>
+  onClick={handleEvaluateAnswer}
+  disabled={loadingEvaluation}
+>
+  {loadingEvaluation
+    ? "Evaluating..."
+    : "Evaluate My Answer"}
+</button>
 
     {evaluation && (
       <div
@@ -340,16 +556,75 @@ const [evaluation, setEvaluation] = useState("");
       >
         <h3>AI Feedback</h3>
 
-        <pre
+        <div
+  style={{
+    whiteSpace: "pre-wrap",
+    lineHeight: "1.8",
+    fontSize: "15px",
+  }}
+>
+  {evaluation
+    .split("\n")
+    .map((line, index) => {
+      const lower = line.toLowerCase();
+
+      let bg = "#0f172a";
+
+      if (lower.includes("score"))
+        bg = "#1e40af";
+
+      if (lower.includes("strength"))
+        bg = "#166534";
+
+      if (lower.includes("weakness"))
+        bg = "#991b1b";
+
+      if (lower.includes("improvement"))
+        bg = "#7c3aed";
+
+      return (
+        <div
+          key={index}
           style={{
-            whiteSpace: "pre-wrap",
-            lineHeight: "1.8",
+            background: bg,
+            padding: "12px",
+            borderRadius: "10px",
+            marginBottom: "10px",
           }}
         >
-          {evaluation}
-        </pre>
+          {line}
+        </div>
+      );
+    })}
+</div>
       </div>
     )}
+  </div>
+)}
+
+{roadmap && (
+  <div
+    style={{
+      marginTop: "20px",
+      background: "#1e293b",
+      padding: "20px",
+      borderRadius: "12px",
+    }}
+  >
+    <h2>
+      🚀 30-Day Learning Roadmap
+    </h2>
+
+    <br />
+
+    <pre
+      style={{
+        whiteSpace: "pre-wrap",
+        lineHeight: "1.8",
+      }}
+    >
+      {roadmap}
+    </pre>
   </div>
 )}
     </div>

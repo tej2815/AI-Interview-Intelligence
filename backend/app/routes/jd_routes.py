@@ -41,9 +41,15 @@ async def analyze_jd(data: JDRequest):
 
     db.close()
 
+    ats_score = max(
+    0,
+    match_score - (len(missing_skills) * 5)
+)
+    
     return {
         "match_score": match_score,
         "resume_skills": resume_skills,
         "jd_skills": jd_skills,
-        "missing_skills": missing_skills
+        "missing_skills": missing_skills,
+        "ats_score": ats_score
     }

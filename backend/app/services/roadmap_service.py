@@ -1,69 +1,61 @@
-import os
-
 from openai import OpenAI
 from dotenv import load_dotenv
 from pathlib import Path
+import os
 
 env_path = Path(__file__).resolve().parents[2] / ".env"
 load_dotenv(env_path)
-print("KEY VALUE:", os.getenv("OPENROUTER_API_KEY"))
-print("OPENROUTER KEY FOUND:", os.getenv("OPENROUTER_API_KEY") is not None)
+
 client = OpenAI(
     api_key=os.getenv("OPENROUTER_API_KEY"),
     base_url="https://openrouter.ai/api/v1"
 )
 
 
-def evaluate_answer(question, answer):
+def generate_roadmap(missing_skills):
 
     prompt = f"""
-    You are a senior technical interviewer.
+    You are a career mentor.
+    You are an experienced software engineering mentor.
 
-    Question:
-    {question}
+    Missing Skills:
+    {missing_skills}
 
-    Candidate Answer:
-    {answer}
+    Create a practical 30-day learning roadmap.
 
-    Evaluate the answer.
-
-    Give:
-
-    1. Score out of 10
-    2. Strengths
-    3. Weaknesses
-    4. Improvements
-
-    Return the response in a clean format.
     Return plain text only.
 
 Do NOT use:
 - Markdown
 - Tables
-- HTML
 - **
 - ###
-- |
-- <br>
+- ---
+- HTML
 
-Format exactly:
+Format exactly like:
 
-Score:
-x/10
+Week 1
+Topic:
+Goals:
+Mini Project:
 
-Strengths:
-- item 1
-- item 2
+Week 2
+Topic:
+Goals:
+Mini Project:
 
-Weaknesses:
-- item 1
-- item 2
+Week 3
+Topic:
+Goals:
+Mini Project:
 
-Improvements:
-- item 1
-- item 2
+Week 4
+Topic:
+Goals:
+Mini Project:
 
-Keep the feedback concise and professional.
+    Keep the roadmap practical and concise.
     """
 
     response = client.chat.completions.create(
