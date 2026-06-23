@@ -32,6 +32,8 @@ const [loadingAnalysis, setLoadingAnalysis] = useState(false);
 
 const answerLength = answer.trim().length;
 
+const [resumeSummary, setResumeSummary] = useState(null);
+
 const copyQuestion = (question) => {
   navigator.clipboard.writeText(question);
 
@@ -39,29 +41,36 @@ const copyQuestion = (question) => {
 };
 
 
+const handleResumeUpload = async () => {
+  if (!selectedFile) {
+    setUploadMessage("Please select a PDF.");
+    return;
+  }
 
-  const handleResumeUpload = async () => {
-    if (!selectedFile) {
-      setUploadMessage("Please select a PDF.");
-      return;
-    }
+  const formData = new FormData();
 
-    const formData = new FormData();
+  formData.append("file", selectedFile);
 
-    formData.append("file", selectedFile);
+  try {
+    const response = await axios.post(
+      `${API_URL}/upload-resume`,
+      formData
+    );
 
-    try {
-      await axios.post(
-        `${API_URL}/upload-resume`,
-        formData
-      );
+    setResumeSummary(response.data.summary);
 
-      setUploadMessage("✅ Resume uploaded successfully");
-    } catch (error) {
-      console.error(error);
-      setUploadMessage("❌ Upload failed");
-    }
-  };
+    setUploadMessage(
+      "✅ Resume uploaded successfully"
+    );
+  } catch (error) {
+    console.error(error);
+
+    setUploadMessage(
+      "❌ Upload failed"
+    );
+  }
+};
+
 
   const handleAnalyzeJD = async () => {
   setLoadingAnalysis(true);
@@ -219,6 +228,60 @@ const copyQuestion = (question) => {
         <br />
 
         <p>{uploadMessage}</p>
+        {resumeSummary && (
+  <div
+    style={{
+      marginTop: "20px",
+      background: "#0f172a",
+      padding: "20px",
+      borderRadius: "12px",
+      border: "1px solid #334155",
+    }}
+  >
+    <h3>📄 Resume Summary</h3>
+
+    <br />
+
+    <p>
+      <strong>Skills Found:</strong>{" "}
+      {resumeSummary.skill_count}
+    </p>
+
+    <p>
+      <strong>Resume Length:</strong>{" "}
+      {resumeSummary.resume_length} characters
+    </p>
+
+    <br />
+
+    <h4>Top Skills</h4>
+
+    <div
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "10px",
+        marginTop: "10px",
+      }}
+    >
+      {resumeSummary.top_skills.map(
+        (skill, index) => (
+          <span
+            key={index}
+            style={{
+              background: "#2563eb",
+              padding: "8px 14px",
+              borderRadius: "999px",
+              fontWeight: "600",
+            }}
+          >
+            {skill}
+          </span>
+        )
+      )}
+    </div>
+  </div>
+)}
       </div>
 
       <div

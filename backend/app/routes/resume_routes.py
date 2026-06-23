@@ -27,7 +27,12 @@ async def upload_resume(file: UploadFile = File(...)):
     db.close()
 
     return {
-        "id": saved_resume.id,
-        "filename": saved_resume.filename,
-        "skills": skills
+    "id": saved_resume.id,
+    "filename": saved_resume.filename,
+    "skills": skills,
+    "summary": {
+        "skill_count": len(skills),
+        "top_skills": skills[:5],
+        "resume_length": len(text)
     }
+}
