@@ -191,13 +191,51 @@ const handleResumeUpload = async () => {
     >
       <>
   <h1 className="hero-title">
-    🤖 AI Interview Intelligence
-  </h1>
+  InterviewForge
+</h1>
 
-  <p className="hero-subtitle">
-    Analyze resumes. Master interviews.
-    Close skill gaps.
-  </p>
+<p className="hero-subtitle">
+  AI-Powered Interview Preparation Platform
+</p>
+
+<div className="stats-row">
+  <div className="stat-card">
+    <h2>
+      {analysisData
+        ? analysisData.resume_skills.length
+        : 0}
+    </h2>
+    <p>Skills Found</p>
+  </div>
+
+  <div className="stat-card">
+    <h2>
+      {analysisData
+        ? analysisData.match_score
+        : 0}
+      %
+    </h2>
+    <p>ATS Match</p>
+  </div>
+
+  <div className="stat-card">
+    <h2>
+      {analysisData
+        ? analysisData.missing_skills.length
+        : 0}
+    </h2>
+    <p>Missing Skills</p>
+  </div>
+
+  <div className="stat-card">
+    <h2>
+      {questions
+        ? questions.split(/\n\d+\./).length - 1
+        : 0}
+    </h2>
+    <p>Questions Generated</p>
+  </div>
+</div>
 </>
 
       <div
@@ -228,6 +266,7 @@ const handleResumeUpload = async () => {
         <br />
 
         <p>{uploadMessage}</p>
+
         {resumeSummary && (
   <div
     style={{
