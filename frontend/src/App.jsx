@@ -1,9 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
 import "./App.css";
-import { useState } from "react";
-import axios from "axios";
-import "./App.css";
 
 const API_URL =
   "https://ai-interview-intelligence-7oc7.onrender.com";
@@ -55,7 +52,7 @@ const copyQuestion = (question) => {
 
     try {
       await axios.post(
-        "http://127.0.0.1:8000/upload-resume",
+        `${API_URL}/upload-resume`,
         formData
       );
 
@@ -71,7 +68,7 @@ const copyQuestion = (question) => {
 
   try {
     const response = await axios.post(
-      "http://127.0.0.1:8000/analyze-jd",
+      `${API_URL}/analyze-jd`,
       {
         job_description: jobDescription,
       }
@@ -91,7 +88,7 @@ const copyQuestion = (question) => {
 
   try {
     const response = await axios.post(
-      "http://127.0.0.1:8000/generate-questions",
+      `${API_URL}/generate-questions`,
       {
         job_description: jobDescription,
       }
@@ -111,7 +108,7 @@ const copyQuestion = (question) => {
 
   try {
     const response = await axios.post(
-      "http://127.0.0.1:8000/evaluate-answer",
+      `${API_URL}/evaluate-answer`,
       {
         question: selectedQuestion,
         answer: answer,
@@ -133,7 +130,7 @@ const copyQuestion = (question) => {
 
   try {
     const response = await axios.post(
-      "http://127.0.0.1:8000/generate-roadmap",
+      `${API_URL}/generate-roadmap`,
       {
         job_description: jobDescription,
       }
