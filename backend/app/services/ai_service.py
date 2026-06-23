@@ -6,11 +6,7 @@ from pathlib import Path
 
 env_path = Path(__file__).resolve().parents[2] / ".env"
 load_dotenv(env_path)
-print("OPENROUTER KEY FOUND:", os.getenv("OPENROUTER_API_KEY") is not None)
-print(
-    "OPENROUTER KEY FOUND:",
-    os.getenv("OPENROUTER_API_KEY") is not None
-)
+
 client = OpenAI(
     api_key=os.getenv("OPENROUTER_API_KEY"),
     base_url="https://openrouter.ai/api/v1"

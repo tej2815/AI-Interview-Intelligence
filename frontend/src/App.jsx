@@ -1,6 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
 import "./App.css";
+import { useState } from "react";
+import axios from "axios";
+import "./App.css";
+
+const API_URL =
+  "https://ai-interview-intelligence-7oc7.onrender.com";
+
 
 function App() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -311,7 +318,7 @@ const copyQuestion = (question) => {
   </p>
 </div>
 
-    
+
   <p
     style={{
       marginTop: "10px",
