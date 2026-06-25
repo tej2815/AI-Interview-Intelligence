@@ -1,10 +1,18 @@
-# 🤖 AI Interview Intelligence
+# InterviewForge
 
 AI-powered platform that analyzes resumes against job descriptions, identifies skill gaps, generates interview questions, evaluates answers, and creates personalized learning roadmaps.
 
+Live Demo:
+https://ai-interview-intelligence-m58jd3udc-tej2815s-projects.vercel.app/
+
+https://interviewforge-app.vercel.app/
+
+GitHub:
+https://github.com/tej2815/AI-Interview-Intelligence
+
 ---
 
-## 🚀 Features
+## Features
 
 - Resume Upload (PDF)
 - Resume Skill Extraction
@@ -19,7 +27,7 @@ AI-powered platform that analyzes resumes against job descriptions, identifies s
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 ### Frontend
 
@@ -44,7 +52,7 @@ AI-powered platform that analyzes resumes against job descriptions, identifies s
 
 ---
 
-## 📊 Workflow
+##  Workflow
 
 Resume Upload
 
@@ -74,7 +82,7 @@ Learning Roadmap
 
 ---
 
-## ⚙ Installation
+##  Installation
 
 ### Backend
 
@@ -102,7 +110,7 @@ npm run dev
 
 ---
 
-## 🎯 Future Improvements
+##  Future Improvements
 
 - AI Follow-up Questions
 - Performance Dashboard
@@ -111,6 +119,6 @@ npm run dev
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 Teja Narayana Bandaru
